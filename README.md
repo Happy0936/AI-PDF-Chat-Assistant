@@ -1,143 +1,270 @@
-# 📄 PDF Chat Assistant using Node.js + LangChain + Google Gemini
+# 📄 AI PDF Chat Assistant
 
-**Chat with your PDFs using AI!** This open-source project lets you upload any PDF file and ask natural language questions about its content using **Google Gemini LLM**, **LangChain**, and **Node.js**.
+An AI-powered PDF question-answering application that allows users to upload PDF documents and ask questions about their content using a Retrieval-Augmented Generation (RAG) workflow.
 
-> Ideal for document analysis, contract review, resume Q&A, and building AI-powered document search systems.
+The application uses **React.js** for the frontend, **Node.js & Express.js** for the backend, **LangChain** for document retrieval, and **Google Gemini** for embeddings and context-aware answer generation.
 
 ---
 
 ## ⭐ Features
 
-- Upload PDF files and parse content.
-- Chunk and embed text using **Gemini Embeddings**.
-- Store embeddings in-memory using LangChain’s `MemoryVectorStore`.
-- Perform similarity search on user questions.
-- Query **Google Gemini** to generate accurate contextual responses.
-
-
-## 🚀 **Powered by**: 
-
-`Google Gemini`, `LangChain`, `FAISS`, `Express.js`, and `pdf-parse`
-
-## 📚 **Keywords**: 
-
-`PDF Chat Assistant`, `LangChain Node.js`, `Gemini LLM`, `Document Q&A`, `RAG`, `AI Chatbot`, `PDF Parser`, `Semantic Search`
+- 📄 Upload and process PDF documents
+- 🔍 Extract and chunk text from uploaded PDFs
+- 🧠 Generate semantic embeddings using Google Gemini
+- 💾 Store document embeddings using LangChain `MemoryVectorStore`
+- 🔎 Retrieve relevant document chunks using semantic similarity search
+- 🤖 Generate context-aware answers using Google Gemini
+- 💬 Interactive React-based user interface
+- 🔗 REST API communication between frontend and backend
+- 🛡️ Reduces hallucinations by answering from retrieved PDF context
 
 ---
 
 ## 🧰 Tech Stack
 
-| Component       | Technology                  |
-|----------------|-----------------------------|
-| Backend         | Node.js (Express)           |
-| AI/LLM API      | Google Gemini (via LangChain)|
-| PDF Parsing     | `pdf-parse`                 |
-| Embedding Store | LangChain Memory Vector DB  |
-| Chunking        | Manual with configurable size |
+| Component | Technology |
+|---|---|
+| Frontend | React.js, Vite, CSS |
+| Backend | Node.js, Express.js |
+| AI / LLM | Google Gemini |
+| Embeddings | Gemini Embedding |
+| RAG Framework | LangChain |
+| Vector Store | LangChain MemoryVectorStore |
+| PDF Processing | pdf-parse |
+| API Architecture | REST APIs |
+| File Upload | Multer |
+
+---
+
+## 🧠 How It Works
+
+```text
+User Uploads PDF
+        ↓
+React Frontend
+        ↓
+Node.js + Express API
+        ↓
+PDF Text Extraction
+        ↓
+Text Chunking
+        ↓
+Gemini Embeddings
+        ↓
+LangChain MemoryVectorStore
+        ↓
+Semantic Similarity Search
+        ↓
+Relevant Document Context
+        ↓
+Gemini LLM
+        ↓
+Context-Aware Answer
+```
+
+The system follows a **Retrieval-Augmented Generation (RAG)** approach. Instead of sending the entire document to the language model, it retrieves the most relevant chunks for the user's question and provides them as context to Gemini.
+
+---
+
+## 📁 Project Structure
+
+```text
+AI-PDF-Chat-Assistant/
+│
+├── backend/
+│   ├── controllers/
+│   │   └── chatController.js
+│   ├── routes/
+│   │   └── chatRoutes.js
+│   ├── services/
+│   │   ├── pdfService.js
+│   │   ├── embeddingService.js
+│   │   └── geminiService.js
+│   ├── utils/
+│   │   └── chunkText.js
+│   ├── uploads/
+│   ├── app.js
+│   ├── package.json
+│   └── .env
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── App.css
+│   │   ├── index.css
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
+│
+├── .gitignore
+└── README.md
+```
 
 ---
 
 ## 🛠️ Installation
 
-```bash
-git clone https://github.com/your-username/pdf-chat-gemini.git
-cd pdf-chat-gemini
-npm install
+### 1. Clone the Repository
 
+```bash
+git clone https://github.com/Happy0936/AI-PDF-Chat-Assistant.git
+cd AI-PDF-Chat-Assistant
 ```
+
+### 2. Install Backend Dependencies
+
+```bash
+cd backend
+npm install
+```
+
+### 3. Install Frontend Dependencies
+
+```bash
+cd ../frontend
+npm install
+```
+
+---
 
 ## 🔐 Environment Variables
 
-Create a .env file in the root:
+Create a `.env` file inside the `backend` directory:
 
-```
+```env
 PORT=3000
 GEMINI_API_KEY=your_google_gemini_api_key
 ```
 
-##### ✅ You need access to Google AI Studio or Vertex AI to get your Gemini API key.
+You can obtain a Gemini API key from Google AI Studio.
 
-## 📦 Run the Project
+> ⚠️ Never commit your `.env` file or API key to GitHub.
 
-```
+---
+
+## 🚀 Run the Application
+
+### Start Backend
+
+Open a terminal:
+
+```bash
+cd backend
 node app.js
 ```
 
+Backend runs on:
+
+```text
+http://localhost:3000
+```
+
+### Start Frontend
+
+Open another terminal:
+
+```bash
+cd frontend
+npm run dev
+```
+
+Frontend runs on:
+
+```text
+http://localhost:5173
+```
+
+Open the frontend URL in your browser, upload a PDF, and start asking questions.
+
+---
+
 ## 📬 API Endpoints
 
-### 1. Upload PDF
+### Upload PDF
 
-```
+```http
 POST /api/chat/upload
-Content-Type: multipart/form-data
-Form field: pdf (upload a .pdf file)
 ```
 
-- Parses PDF
-- Extracts text
-- Chunks and embeds it into memory
+Request type:
 
-### 2. Ask a Question
-
+```text
+multipart/form-data
 ```
+
+Form field:
+
+```text
+pdf
+```
+
+The backend extracts the PDF text, creates chunks, generates embeddings, and stores them in the vector store.
+
+### Ask Question
+
+```http
 POST /api/chat/ask
-Content-Type: application/json
+```
 
+Request body:
+
+```json
 {
-  "question": "What is this PDF about?"
+  "question": "What is the main objective of this document?"
 }
 ```
 
-- Returns answer based on the most relevant chunks from the uploaded PDF
+The system retrieves relevant document chunks and uses them as context for generating the answer.
 
-#
+---
 
-## 📁 Project Structure
+## 🔄 RAG Workflow
 
-```
-pdf-chat-assistant/
-├── app.js
-├── .env
-├── controllers/
-│   └── chatController.js
-├── routes/
-│   └── chatRoutes.js
-├── services/
-│   ├── pdfService.js
-│   ├── embeddingService.js
-│   └── geminiService.js
-├── utils/
-│   └── chunkText.js
-├── uploads/
-└── vector-store/
-```
+1. User uploads a PDF.
+2. `pdf-parse` extracts text from the document.
+3. Extracted text is divided into smaller chunks.
+4. Gemini generates embeddings for the chunks.
+5. LangChain stores the embeddings in `MemoryVectorStore`.
+6. The user's question is converted into an embedding.
+7. Semantic similarity search retrieves the most relevant chunks.
+8. Retrieved context and the question are sent to Gemini.
+9. Gemini generates a context-aware response.
+10. The answer is displayed on the React frontend.
 
-##  🧠 How It Works
+---
 
-- Upload: PDF gets parsed and split into chunks.
-- Embed: Each chunk is turned into a vector using Gemini Embeddings.
-- Store: Vectors are stored in a temporary in-memory vector store.
-- Query: User asks a question → similar chunks are retrieved.
-- Answer: Gemini responds using those chunks as context.
+## 🎯 Use Cases
 
-## 🧪 Example Usage
+- Research paper analysis
+- Resume and document Q&A
+- Study material exploration
+- Report summarization and querying
+- Knowledge-base document search
+- AI-powered document assistance
 
-Use Postman or Insomnia to:
+---
 
-1. Upload a PDF to `/api/chat/upload`
+## 🔮 Future Improvements
 
-2. Then POST to `/api/chat/ask` with your question
+- Support multiple PDF documents
+- Add persistent vector database storage
+- Add chat history
+- Improve document retrieval and chunking
+- Add source/page citations in answers
+- Add user authentication
+- Deploy frontend and backend to cloud platforms
 
-## Demo Link
+---
 
-[Demo](https://jam.dev/c/b569bc2b-6417-49ad-87ce-5672bbc63a22)
+## 👩‍💻 Author
+
+**Happy Kumari**
+
+GitHub: [Happy0936](https://github.com/Happy0936)
+
+---
 
 ## 📄 License
-MIT License
 
-## 🙌 Acknowledgements
-LangChain
-
-Google Generative AI (Gemini)
-
-pdf-parse
+This project is intended for educational and development purposes.
